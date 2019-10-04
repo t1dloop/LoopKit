@@ -673,18 +673,13 @@ fileprivate class CarbStatusBuilder<T: CarbEntry> {
     }
     
     func absorptionRateAtTime(t: TimeInterval) -> Double {
-        // Absorption rate found based on time nomalized to maximumAbsorptionTime
-        // dm61 TODO(?) an attempt below to nomalize to dynamicAbsorptionTime resulted in anomalies in post-absorption split among overlapping carb entries
-        /*
-        let dynamicAbsorptionTime = min(t + estimatedTimeRemaining, maxAbsorptionTime)
+        // dm61 TODO(?): here, percentTime = time nomalized to estimated or observed total absorption time; check if this is the best approach to calculate absorption rate for effect allocation purposes?
+        let dynamicAbsorptionTime = min(observedAbsorptionDates.duration + estimatedTimeRemaining, maxAbsorptionTime)
         guard dynamicAbsorptionTime > 0 else {
             return(0.0)
         }
         let absorptionRate = entryGrams / dynamicAbsorptionTime
         let percentTime = t / dynamicAbsorptionTime
-        */
-        let absorptionRate = entryGrams / maxAbsorptionTime
-        let percentTime = t / maxAbsorptionTime
         return absorptionRate * PiecewiseLinearAbsorption.percentRateAtPercentTime(forPercentTime: percentTime)
     }
     
